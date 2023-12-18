@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chatmulticliente.HelloController">
+   <top>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Servidor de chat" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="25.0" top="25.0" />
+         </BorderPane.margin>
+      </Text>
+   </top>
+   <center>
+      <TextArea fx:id="textArea" editable="false" prefHeight="334.0" prefWidth="557.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="25.0" left="25.0" right="25.0" />
+         </BorderPane.margin>
+      </TextArea>
+   </center>
+</BorderPane>
