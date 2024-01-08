@@ -8,6 +8,7 @@ import java.util.List;
 
 public class LanzaServidor implements Runnable {
     HelloController c;
+    ControllerCliente c2;
 
     LanzaServidor(HelloController c) {
         this.c = c;

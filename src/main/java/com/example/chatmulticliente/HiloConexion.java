@@ -13,6 +13,7 @@ public class HiloConexion implements Runnable {
 
     private BufferedReader flujoEntrada;
     private PrintWriter flujoSalida;
+    HiloRecibirCliente c;
 
     public HiloConexion(LanzaServidor servidor, Socket conexion) {
         this.conexion = conexion;
@@ -21,12 +22,15 @@ public class HiloConexion implements Runnable {
 
     @Override
     public void run() {
-        try(BufferedReader flujoEntrada=new BufferedReader(new InputStreamReader(conexion.getInputStream()))) {
+        try {
+            flujoEntrada = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+            flujoSalida=new PrintWriter(conexion.getOutputStream());
             while (true) {
                 String lectura = flujoEntrada.readLine();
                 String comando = lectura.substring(0, 3);
                 if (comando.equals("MSG")) {
-                    servidor.enviarMsg(" "+lectura.substring(3));
+                    servidor.enviarMsg(" " + lectura.substring(3));
+                    new Thread(c).start();
                 }
 
                 if (comando.equals("CON")) {
@@ -41,13 +45,24 @@ public class HiloConexion implements Runnable {
 
         } catch (IOException e) {
             System.out.println("No se pudo crear algún flujo");
+            e.printStackTrace();
+        } finally {
+            try {
+                flujoEntrada.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
-    public void enviar(String msg){
-        try(PrintWriter flujoSalida = new PrintWriter(conexion.getOutputStream())) {
+
+    public void enviar(String msg) {
+        flujoSalida.println(msg);
+        flujoSalida.flush();
+        /*try (PrintWriter flujoSalida = new PrintWriter(conexion.getOutputStream())) {
             flujoSalida.println(msg);
+            flujoSalida.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 }

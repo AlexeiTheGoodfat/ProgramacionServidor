@@ -7,7 +7,6 @@ import javafx.scene.control.TextArea;
 public class HelloController {
     @FXML
     private TextArea textArea;
-    ControllerCliente c2;
     @FXML
     void initialize() {
         new Thread(new LanzaServidor(this)).start();

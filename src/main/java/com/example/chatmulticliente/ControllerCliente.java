@@ -66,15 +66,11 @@ public class ControllerCliente {
     }
 
     private void enviar() {
-        if (!conexion.isClosed()) {
-            try (PrintWriter flujoSalida = new PrintWriter(conexion.getOutputStream())) {
-                flujoSalida.println("MSG" + escribirField.getText());
-                escribirField.setText("");
-                flujoSalida.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        /*if (!conexion.isClosed()) {*/
+            flujoSalida.println("MSG" + escribirField.getText());
+            escribirField.setText("");
+            flujoSalida.flush();
+//        }
     }
 
     @FXML
