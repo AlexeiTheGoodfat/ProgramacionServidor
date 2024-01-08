@@ -23,6 +23,9 @@ public class HiloRecibirCliente implements Runnable {
         try (BufferedReader flujoEntrada = new BufferedReader(new InputStreamReader(c.conexion.getInputStream()))) {
             c.escribirField.appendText(flujoEntrada.readLine());
         } catch (IOException e) {
+
+        } catch (NullPointerException e2) {
+            System.out.println("escribir field nulo");
         }
     }
 

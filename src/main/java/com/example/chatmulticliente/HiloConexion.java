@@ -30,7 +30,7 @@ public class HiloConexion implements Runnable {
                 }
 
                 if (comando.equals("CON")) {
-
+                    servidor.c.escribirTexto("Se ha conectado " + lectura.substring(4));
                 }
 
                 if (comando.equals("EXI")) {

@@ -18,16 +18,16 @@ import java.util.IllegalFormatCodePointException;
 
 
 public class ControllerCliente {
-    public Socket conexion;
+    public Socket conexion = new Socket();
     private InetSocketAddress direccion;
     private BufferedReader flujoEntrada;
     private PrintWriter flujoSalida;
 
     @FXML
-    private TextArea textArea;
+    public TextArea textArea;
 
     @FXML
-    private TextField campoNick;
+    public TextField campoNick;
     @FXML
     public TextField escribirField;
 
@@ -44,47 +44,51 @@ public class ControllerCliente {
     }
 
     private void conectar() {
-
-        conexion = new Socket();
-
         direccion = new InetSocketAddress("localhost", 9876);
 
         try {
-            /*campoNick.setText("Anon");*/
             conexion.connect(direccion);
             flujoEntrada = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
 
             flujoSalida = new PrintWriter(conexion.getOutputStream());
 
             System.out.println("Conexion establecida");
-            /*flujoSalida.println("CON " + campoNick.getText());*/
+
+            flujoSalida.println("CON " + campoNick.getText());
+
             flujoSalida.flush();
         } catch (IOException e) {
-            System.out.println("Se ha producido algún error en la conexión");
-            textArea.appendText("Se ha producido algún error en la conexión");
+
+        } catch (NullPointerException x) {
+
         }
 
     }
 
     private void enviar() {
-        try (PrintWriter flujoSalida = new PrintWriter(conexion.getOutputStream())) {
-            flujoSalida.println("MSG" + escribirField.getText());
-            flujoSalida.flush();
-            this.escribirField.setText("");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (!conexion.isClosed()) {
+            try (PrintWriter flujoSalida = new PrintWriter(conexion.getOutputStream())) {
+                flujoSalida.println("MSG" + escribirField.getText());
+                escribirField.setText("");
+                flujoSalida.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-
     }
+
     @FXML
     void initialize() {
-        assert campoNick != null : "fx:id=\"campoNick\" was not injected: check your FXML file 'cliente.fxml'.";
-        assert escribirField != null : "fx:id=\"escribirField\" was not injected: check your FXML file 'cliente.fxml'.";
-        assert textArea != null : "fx:id=\"textArea\" was not injected: check your FXML file 'cliente.fxml'.";
+        try {
+            campoNick.setText("Anon");
+            conectar();
+            recibir();
+            assert campoNick != null : "fx:id=\"campoNick\" was not injected: check your FXML file 'cliente.fxml'.";
+            assert escribirField != null : "fx:id=\"escribirField\" was not injected: check your FXML file 'cliente.fxml'.";
+            assert textArea != null : "fx:id=\"textArea\" was not injected: check your FXML file 'cliente.fxml'.";
+        } catch (NullPointerException x) {
 
-    }
-    public ControllerCliente(){
-        conectar();
-        recibir();
+        }
+
     }
 }

@@ -20,9 +20,9 @@ public class LanzaServidor implements Runnable {
         ServerSocket serverSocket;
         final int PUERTO = 9876;
         try {
-            serverSocket = new ServerSocket(PUERTO);
-            c.escribirTexto("### Servidor inciado");
             while (true) {
+                serverSocket = new ServerSocket(PUERTO);
+                c.escribirTexto("### Servidor inciado");
 
                 Socket conexion;
 
