@@ -1,7 +1,7 @@
 package com.example.chatmulticliente;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
 public class HelloController {
@@ -12,6 +12,9 @@ public class HelloController {
         new Thread(new LanzaServidor(this)).start();
     }
     public void escribirTexto(String s) {
+/*        Platform.runLater(() -> {
+            textArea.appendText(s+"\n");
+        });*/
         textArea.appendText(s+"\n");
     }
 }

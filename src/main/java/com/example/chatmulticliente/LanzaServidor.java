@@ -1,6 +1,8 @@
 package com.example.chatmulticliente;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -8,7 +10,8 @@ import java.util.List;
 
 public class LanzaServidor implements Runnable {
     HelloController c;
-    ControllerCliente c2;
+
+    Socket conexion;
 
     LanzaServidor(HelloController c) {
         this.c = c;
@@ -21,12 +24,9 @@ public class LanzaServidor implements Runnable {
         ServerSocket serverSocket;
         final int PUERTO = 9876;
         try {
+            serverSocket = new ServerSocket(PUERTO);
+            c.escribirTexto("### Servidor inciado");
             while (true) {
-                serverSocket = new ServerSocket(PUERTO);
-                c.escribirTexto("### Servidor inciado");
-
-                Socket conexion;
-
                 conexion = serverSocket.accept();
 
                 c.escribirTexto("--- Petición de conexión recibida");

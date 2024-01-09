@@ -30,11 +30,10 @@ public class HiloConexion implements Runnable {
                 String comando = lectura.substring(0, 3);
                 if (comando.equals("MSG")) {
                     servidor.enviarMsg(" " + lectura.substring(3));
-                    new Thread(c).start();
                 }
 
                 if (comando.equals("CON")) {
-                    servidor.c.escribirTexto("Se ha conectado " + lectura.substring(4));
+                    servidor.c.escribirTexto("Se ha conectado " + lectura.substring(3));
                 }
 
                 if (comando.equals("EXI")) {
@@ -58,11 +57,6 @@ public class HiloConexion implements Runnable {
     public void enviar(String msg) {
         flujoSalida.println(msg);
         flujoSalida.flush();
-        /*try (PrintWriter flujoSalida = new PrintWriter(conexion.getOutputStream())) {
-            flujoSalida.println(msg);
-            flujoSalida.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
+
     }
 }
