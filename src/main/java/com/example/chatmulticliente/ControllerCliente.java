@@ -16,6 +16,7 @@ import java.util.Optional;
 
 public class ControllerCliente {
     public Socket conexion = new Socket();
+    static String nombre;
     private InetSocketAddress direccion;
     private BufferedReader flujoEntrada;
 
@@ -45,29 +46,6 @@ public class ControllerCliente {
         new Thread(new HiloRecibirCliente(this)).start();
     }
 
-    public void conectar() {
-        while (this.campoNick.getText().isEmpty()) {
-            this.campoNick.setText(campoNombre());
-        }
-        direccion = new InetSocketAddress("localhost", 9876);
-
-        try {
-            conexion.connect(direccion);
-            flujoEntrada = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
-
-            flujoSalida = new PrintWriter(conexion.getOutputStream());
-
-            System.out.println("Conexion establecida");
-
-            flujoSalida.println("CON" + campoNick.getText());
-            flujoSalida.flush();
-            recibir();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
     /*public void escribirField() {
         try {
             flujoEntrada=new BufferedReader(new InputStreamReader(conexion.getInputStream()));
@@ -93,6 +71,7 @@ public class ControllerCliente {
     void initialize() {
         try {
             conectar();
+            nombre = campoNick.getText();
             assert campoNick != null : "fx:id=\"campoNick\" was not injected: check your FXML file 'cliente.fxml'.";
             assert escribirField != null : "fx:id=\"escribirField\" was not injected: check your FXML file 'cliente.fxml'.";
             assert textArea != null : "fx:id=\"textArea\" was not injected: check your FXML file 'cliente.fxml'.";
@@ -102,16 +81,41 @@ public class ControllerCliente {
 
     }
 
-    private String campoNombre(){
+    private String campoNombre() {
         TextInputDialog dialog = new TextInputDialog("walter");
         dialog.setTitle("Text Input Dialog");
         dialog.setHeaderText("Look, a Text Input Dialog");
         dialog.setContentText("Please enter your name:");
 
 
-        Optional<String> result=dialog.showAndWait();
+        Optional<String> result = dialog.showAndWait();
         return result.get();
     }
+
+    public void conectar() {
+        while (this.campoNick.getText().isEmpty()) {
+            this.campoNick.setText(campoNombre());
+        }
+        direccion = new InetSocketAddress("localhost", 9876);
+
+        try {
+            conexion.connect(direccion);
+            flujoEntrada = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+
+            flujoSalida = new PrintWriter(conexion.getOutputStream());
+
+            System.out.println("Conexion establecida");
+
+            flujoSalida.println("CON" + campoNick.getText());
+            flujoSalida.flush();
+            recibir();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public PrintWriter getFlujoSalida() {
         return flujoSalida;
     }
