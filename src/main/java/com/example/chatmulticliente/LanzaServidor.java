@@ -42,7 +42,7 @@ public class LanzaServidor implements Runnable {
     }
 
     public void enviarMsg(String msg) {
-        c.escribirTexto("Envio msg:" + msg);
+        c.escribirTexto("Envio msg de" + msg);
         for (HiloConexion hc : conexiones) {
             hc.enviar(msg);
         }

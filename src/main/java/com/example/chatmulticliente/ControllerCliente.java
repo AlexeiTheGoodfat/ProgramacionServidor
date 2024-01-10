@@ -37,7 +37,9 @@ public class ControllerCliente {
     @FXML
     void escribir(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            enviar();
+            if (!escribirField.getText().isEmpty()) {
+                enviar();
+            }
         }
     }
 
@@ -57,7 +59,7 @@ public class ControllerCliente {
 
     private void enviar() {
         /*if (!conexion.isClosed()) {*/
-        flujoSalida.println("MSG" + escribirField.getText());
+        flujoSalida.println("MSG" +campoNick.getText()+": " + escribirField.getText());
         escribirField.setText("");
         flujoSalida.flush();
 //        }
@@ -71,7 +73,6 @@ public class ControllerCliente {
     void initialize() {
         try {
             conectar();
-            nombre = campoNick.getText();
             assert campoNick != null : "fx:id=\"campoNick\" was not injected: check your FXML file 'cliente.fxml'.";
             assert escribirField != null : "fx:id=\"escribirField\" was not injected: check your FXML file 'cliente.fxml'.";
             assert textArea != null : "fx:id=\"textArea\" was not injected: check your FXML file 'cliente.fxml'.";
@@ -82,10 +83,10 @@ public class ControllerCliente {
     }
 
     private String campoNombre() {
-        TextInputDialog dialog = new TextInputDialog("walter");
-        dialog.setTitle("Text Input Dialog");
-        dialog.setHeaderText("Look, a Text Input Dialog");
-        dialog.setContentText("Please enter your name:");
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Apodo");
+        dialog.setHeaderText("Apodo");
+        dialog.setContentText("Introduce tu apodo");
 
 
         Optional<String> result = dialog.showAndWait();

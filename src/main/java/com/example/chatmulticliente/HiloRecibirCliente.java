@@ -17,7 +17,7 @@ public class HiloRecibirCliente implements Runnable {
         BufferedReader flujoEntrada = c.getFlujoEntrada();
         try {
             while (flujoEntrada.read() != 0) {
-                c.textArea.appendText(c.nombre+ ": " + flujoEntrada.readLine() + "\n");
+                c.textArea.appendText(flujoEntrada.readLine() + "\n");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

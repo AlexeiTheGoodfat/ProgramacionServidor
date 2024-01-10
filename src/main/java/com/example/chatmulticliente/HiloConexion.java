@@ -29,7 +29,7 @@ public class HiloConexion implements Runnable {
                 String lectura = flujoEntrada.readLine();
                 String comando = lectura.substring(0, 3);
                 if (comando.equals("MSG")) {
-                    servidor.enviarMsg(" " + lectura.substring(3));
+                    servidor.enviarMsg(" "+lectura.substring(3));
                 }
 
                 if (comando.equals("CON")) {
