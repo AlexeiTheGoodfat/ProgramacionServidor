@@ -1,9 +1,14 @@
 package com.example.chatmulticliente;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,11 +17,11 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class ControllerCliente {
     public Socket conexion = new Socket();
-    static String nombre;
     private InetSocketAddress direccion;
     private BufferedReader flujoEntrada;
 
@@ -25,6 +30,8 @@ public class ControllerCliente {
     }
 
     private PrintWriter flujoSalida;
+    @FXML
+    private TextFlow textFlow;
 
     @FXML
     public TextArea textArea;
@@ -48,18 +55,9 @@ public class ControllerCliente {
         new Thread(new HiloRecibirCliente(this)).start();
     }
 
-    /*public void escribirField() {
-        try {
-            flujoEntrada=new BufferedReader(new InputStreamReader(conexion.getInputStream()));
-            textArea.appendText(campoNick.getText()+":"+flujoEntrada.readLine());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
-
     private void enviar() {
         /*if (!conexion.isClosed()) {*/
-        flujoSalida.println("MSG" +campoNick.getText()+": " + escribirField.getText());
+        flujoSalida.println("MSG"+campoNick.getText()+": " + escribirField.getText());
         escribirField.setText("");
         flujoSalida.flush();
 //        }
@@ -73,9 +71,11 @@ public class ControllerCliente {
     void initialize() {
         try {
             conectar();
+            recibir();
             assert campoNick != null : "fx:id=\"campoNick\" was not injected: check your FXML file 'cliente.fxml'.";
             assert escribirField != null : "fx:id=\"escribirField\" was not injected: check your FXML file 'cliente.fxml'.";
             assert textArea != null : "fx:id=\"textArea\" was not injected: check your FXML file 'cliente.fxml'.";
+            assert textFlow != null : "fx:id=\"textFlow\" was not injected: check your FXML file 'cliente.fxml'.";
         } catch (NullPointerException x) {
 
         }
@@ -109,12 +109,21 @@ public class ControllerCliente {
 
             flujoSalida.println("CON" + campoNick.getText());
             flujoSalida.flush();
-            recibir();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+    public void escribirColor(String msg, Color c){
+        try {
+            Platform.runLater(()->{
+                Text text=new Text(msg);
+                text.setFill(c);
+                textFlow.getChildren().add(text);
+            });
+        }catch (NullPointerException e) {
+        }
     }
 
     public PrintWriter getFlujoSalida() {

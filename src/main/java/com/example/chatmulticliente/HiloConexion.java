@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class HiloConexion implements Runnable {
 
@@ -14,6 +15,9 @@ public class HiloConexion implements Runnable {
     private BufferedReader flujoEntrada;
     private PrintWriter flujoSalida;
     HiloRecibirCliente c;
+    int r= ThreadLocalRandom.current().nextInt(256);
+    int g=ThreadLocalRandom.current().nextInt(256);
+    int b=ThreadLocalRandom.current().nextInt(256);
 
     public HiloConexion(LanzaServidor servidor, Socket conexion) {
         this.conexion = conexion;
@@ -29,7 +33,7 @@ public class HiloConexion implements Runnable {
                 String lectura = flujoEntrada.readLine();
                 String comando = lectura.substring(0, 3);
                 if (comando.equals("MSG")) {
-                    servidor.enviarMsg(" "+lectura.substring(3));
+                    servidor.enviarMsg(" "+lectura.substring(3)+" "+hex());
                 }
 
                 if (comando.equals("CON")) {
@@ -58,5 +62,9 @@ public class HiloConexion implements Runnable {
         flujoSalida.println(msg);
         flujoSalida.flush();
 
+    }
+    private String hex(){
+
+        return "#"+Integer.toHexString(r)+Integer.toHexString(g)+Integer.toHexString(b);
     }
 }
